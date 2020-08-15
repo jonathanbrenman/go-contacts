@@ -23,15 +23,6 @@ type ContactsController interface {
 	Update(c *gin.Context)
 }
 
-func NewContactController() *contactsController{
-	dbConn := repository.GetDbConn()
-	contactService := services.NewContactService(dbConn)
-	return &contactsController{
-		dbConn: dbConn,
-		contactService: contactService,
-	}
-}
-
 func (ctrl contactsController) getAll(c *gin.Context) {
 	contacts, err := ctrl.contactService.GetAll()
 	if err != nil {
@@ -43,7 +34,7 @@ func (ctrl contactsController) getAll(c *gin.Context) {
 }
 
 func (ctrl contactsController) getContact(c *gin.Context) {
-	contactIdStr := c.Param("contact_id")
+	contactIdStr := c.Param("id")
 	if contactIdStr == "" {
 		httpError := models.NewHttpError(http.StatusBadRequest,"bad request.")
 		models.ReturnHttpError(c, httpError)
@@ -52,7 +43,11 @@ func (ctrl contactsController) getContact(c *gin.Context) {
 	contactId, _ := strconv.Atoi(contactIdStr)
 	contact, err := ctrl.contactService.GetContact(contactId)
 	if err != nil {
-		httpError := models.NewHttpError(http.StatusInternalServerError,"internal error")
+		code := 500
+		if err == gorm.ErrRecordNotFound {
+			code = 404
+		}
+		httpError := models.NewHttpError(code, err.Error())
 		models.ReturnHttpError(c, httpError)
 		return
 	}
@@ -82,7 +77,7 @@ func (ctrl contactsController) add(c *gin.Context) {
 }
 
 func (ctrl contactsController) delete(c *gin.Context) {
-	contactIdStr := c.Param("contact_id")
+	contactIdStr := c.Param("id")
 	if contactIdStr == "" {
 		httpError := models.NewHttpError(http.StatusBadRequest,"bad request.")
 		models.ReturnHttpError(c, httpError)
@@ -145,4 +140,15 @@ func (ctrl contactsController) Delete(c *gin.Context) {
 
 func (ctrl contactsController) Update(c *gin.Context) {
 	ctrl.update(c)
+}
+
+// Factory Functions
+
+func NewContactController() *contactsController{
+	db := repository.GetDbConn()
+	contactService := services.NewContactService(db)
+	return &contactsController{
+		dbConn: db,
+		contactService: contactService,
+	}
 }
