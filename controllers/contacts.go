@@ -11,6 +11,7 @@ type ContactsController interface {
 	GetContact(c *gin.Context)
 	Add(c *gin.Context)
 	Delete(c *gin.Context)
+	Update(c *gin.Context)
 }
 
 func NewContactController() *contactsController{
@@ -45,6 +46,13 @@ func (ctrl contactsController) delete(c *gin.Context) {
 	})
 }
 
+func (ctrl contactsController) update(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"code":         200,
+		"message": "pong",
+	})
+}
+
 // Interface implementation here
 
 func (ctrl contactsController) GetAll(c *gin.Context) {
@@ -61,4 +69,8 @@ func (ctrl contactsController) Add(c *gin.Context) {
 
 func (ctrl contactsController) Delete(c *gin.Context) {
 	ctrl.delete(c)
+}
+
+func (ctrl contactsController) Update(c *gin.Context) {
+	ctrl.update(c)
 }

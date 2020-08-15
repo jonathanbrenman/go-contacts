@@ -14,6 +14,7 @@ type ContactRepository interface {
 	GetContact(contactId int)(contact models.Contact, err error)
 	Add(contact models.Contact) error
 	Delete(contactId int) error
+	Update(contactId int, contact models.Contact) error
 }
 
 func NewContactRepository(db *gorm.DB) *repository {
@@ -32,22 +33,35 @@ func (repo *repository) getContact(contactId int) (contact models.Contact, err e
 	return contact, err
 }
 
-func (repo *repository) Add(contact models.Contact) error{
+func (repo *repository) add(contact models.Contact) error{
 	err := repo.dbClient.Save(&contact).Error
 	return err
 }
 
-func (repo *repository) Delete(contactId int) error{
+func (repo *repository) delete(contactId int) error{
 	err := repo.dbClient.Where("id = ?", contactId).Delete(models.Contact{}).Error
+	return err
+}
+
+func (repo *repository) update(contactId int, contact models.Contact) error{
+	err := repo.dbClient.Where("id = ?", contactId).Update(&contact).Error
 	return err
 }
 
 // Interface implementation here
 
-func (repo *repository) GetAll() (contacts []models.Contact, err error) {
+func (repo *repository) GetAll() ([]models.Contact, error) {
 	return repo.getAll()
 }
 
-func (repo *repository) GetContact(contactId int) (contact models.Contact, err error) {
+func (repo *repository) GetContact(contactId int) (models.Contact, error) {
 	return repo.getContact(contactId)
+}
+
+func (repo *repository) Delete(contactId int) error {
+	return repo.delete(contactId)
+}
+
+func (repo *repository) Update(contactId int, contact models.Contact) error {
+	return repo.update(contactId, contact)
 }
