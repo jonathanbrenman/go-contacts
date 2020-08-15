@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"Agenda/models"
+	"Agenda/repository"
+	"Agenda/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,10 +22,18 @@ func NewContactController() *contactsController{
 }
 
 func (ctrl contactsController) getAll(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"code":         200,
-		"message": "pong",
-	})
+	dbConn := repository.GetDbConn()
+	contactService := services.NewContactService(dbConn)
+	contacts, err := contactService.GetAll()
+	if err != nil {
+		httpError := models.HttpErrorResponse{
+			Code: 500,
+			Error: err.Error(),
+		}
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+	c.JSON(200, contacts)
 }
 
 func (ctrl contactsController) getContact(c *gin.Context) {

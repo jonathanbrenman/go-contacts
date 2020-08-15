@@ -17,10 +17,8 @@ type ContactRepository interface {
 	Update(contactId int, contact models.Contact) error
 }
 
-func NewContactRepository(db *gorm.DB) *repository {
-	return &repository{
-		dbClient: db,
-	}
+func NewContactRepository(db *gorm.DB) {
+	dbClient = db
 }
 
 func (repo *repository) getAll() (contacts []models.Contact, err error){
