@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"Agenda/models"
 	"errors"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
@@ -15,6 +16,9 @@ func InitDatabase(dialect string, host string) (err error) {
 	if err != nil {
 		return errors.New("[Error] Connection to database " + dialect +" has failed")
 	}
+	// Initialize table contacts on database
+	dbClient.Debug().LogMode(true)
+	dbClient.AutoMigrate(&models.Contact{})
 	return err
 }
 
