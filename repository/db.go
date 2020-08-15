@@ -6,6 +6,10 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
+type repository struct {
+	dbClient *gorm.DB
+}
+
 func NewRepositoryDB(dialect string, host string) (*repository, error) {
 	db, err := gorm.Open(dialect, host)
 	if err != nil {
