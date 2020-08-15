@@ -5,7 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type contactRepository struct {
+type repository struct {
 	dbClient *gorm.DB
 }
 
@@ -16,38 +16,38 @@ type ContactRepository interface {
 	Delete(contactId int) error
 }
 
-func NewContactRepository(db *gorm.DB) *contactRepository {
-	return &contactRepository{
+func NewContactRepository(db *gorm.DB) *repository {
+	return &repository{
 		dbClient: db,
 	}
 }
 
-func (repo *contactRepository) getAll() (contacts []models.Contact, err error){
+func (repo *repository) getAll() (contacts []models.Contact, err error){
 	err = repo.dbClient.Find(&contacts).Error
 	return contacts, err
 }
 
-func (repo *contactRepository) getContact(contactId int) (contact models.Contact, err error){
+func (repo *repository) getContact(contactId int) (contact models.Contact, err error){
 	err = repo.dbClient.Where("id = ?", contactId).Find(&contact).Error
 	return contact, err
 }
 
-func (repo *contactRepository) Add(contact models.Contact) error{
+func (repo *repository) Add(contact models.Contact) error{
 	err := repo.dbClient.Save(&contact).Error
 	return err
 }
 
-func (repo *contactRepository) Delete(contactId int) error{
+func (repo *repository) Delete(contactId int) error{
 	err := repo.dbClient.Where("id = ?", contactId).Delete(models.Contact{}).Error
 	return err
 }
 
 // Interface implementation here
 
-func (repo *contactRepository) GetAll() (contacts []models.Contact, err error) {
+func (repo *repository) GetAll() (contacts []models.Contact, err error) {
 	return repo.getAll()
 }
 
-func (repo *contactRepository) GetContact(contactId int) (contact models.Contact, err error) {
+func (repo *repository) GetContact(contactId int) (contact models.Contact, err error) {
 	return repo.getContact(contactId)
 }
