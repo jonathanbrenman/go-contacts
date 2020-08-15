@@ -1,6 +1,7 @@
 package app
 
 import (
+	"Agenda/mocks"
 	"Agenda/repository"
 	"Agenda/router"
 )
@@ -15,4 +16,5 @@ func Start() {
 	if err != nil {
 		panic(err)
 	}
+	mocks.LoadMockContacts(repository.GetDbConn())
 }
