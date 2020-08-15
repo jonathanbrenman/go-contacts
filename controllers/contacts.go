@@ -5,9 +5,15 @@ import (
 	"Agenda/repository"
 	"Agenda/services"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
+	"net/http"
+	"strconv"
 )
 
-type contactsController struct {}
+type contactsController struct {
+	dbConn *gorm.DB
+	contactService *services.ContactService
+}
 
 type ContactsController interface {
 	GetAll(c *gin.Context)
@@ -18,49 +24,104 @@ type ContactsController interface {
 }
 
 func NewContactController() *contactsController{
-	return &contactsController{}
+	dbConn := repository.GetDbConn()
+	contactService := services.NewContactService(dbConn)
+	return &contactsController{
+		dbConn: dbConn,
+		contactService: contactService,
+	}
 }
 
 func (ctrl contactsController) getAll(c *gin.Context) {
-	dbConn := repository.GetDbConn()
-	contactService := services.NewContactService(dbConn)
-	contacts, err := contactService.GetAll()
+	contacts, err := ctrl.contactService.GetAll()
 	if err != nil {
-		httpError := models.HttpErrorResponse{
-			Code: 500,
-			Error: err.Error(),
-		}
+		httpError := models.NewHttpError(http.StatusInternalServerError,"internal error")
 		models.ReturnHttpError(c, httpError)
 		return
 	}
-	c.JSON(200, contacts)
+	c.JSON(http.StatusOK, contacts)
 }
 
 func (ctrl contactsController) getContact(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"code":         200,
-		"message": "pong",
-	})
+	contactIdStr := c.Param("contact_id")
+	if contactIdStr == "" {
+		httpError := models.NewHttpError(http.StatusBadRequest,"bad request.")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+	contactId, _ := strconv.Atoi(contactIdStr)
+	contact, err := ctrl.contactService.GetContact(contactId)
+	if err != nil {
+		httpError := models.NewHttpError(http.StatusInternalServerError,"internal error")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+	c.JSON(http.StatusOK, contact)
 }
 
 func (ctrl contactsController) add(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"code":         200,
-		"message": "pong",
+	var contact models.Contact
+	c.BindJSON(&contact)
+
+	if contact.Name == "" || contact.Mail == "" {
+		httpError := models.NewHttpError(http.StatusBadRequest,"bad request.")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+	err := ctrl.contactService.Add(contact)
+	if err != nil {
+		httpError := models.NewHttpError(http.StatusInternalServerError,"internal error")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"message": "the user "+contact.Name+" has been added!",
 	})
 }
 
 func (ctrl contactsController) delete(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"code":         200,
-		"message": "pong",
+	contactIdStr := c.Param("contact_id")
+	if contactIdStr == "" {
+		httpError := models.NewHttpError(http.StatusBadRequest,"bad request.")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+
+	contactId, _ := strconv.Atoi(contactIdStr)
+	err := ctrl.contactService.Delete(contactId)
+	if err != nil {
+		httpError := models.NewHttpError(http.StatusInternalServerError,"internal error")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"message": "the user id "+contactIdStr+" has been deleted!",
 	})
 }
 
 func (ctrl contactsController) update(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"code":         200,
-		"message": "pong",
+	var contact models.Contact
+	c.BindJSON(&contact)
+
+	if contact.ID == 0 {
+		httpError := models.NewHttpError(http.StatusBadRequest,"bad request.")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+	err := ctrl.contactService.Update(contact)
+	if err != nil {
+		httpError := models.NewHttpError(http.StatusInternalServerError,"internal error")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"code": http.StatusOK,
+		"message": "the user "+contact.Name+" has been updated!",
 	})
 }
 

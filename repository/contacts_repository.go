@@ -14,7 +14,7 @@ type ContactRepository interface {
 	GetContact(contactId int)(contact models.Contact, err error)
 	Add(contact models.Contact) error
 	Delete(contactId int) error
-	Update(contactId int, contact models.Contact) error
+	Update(contact models.Contact) error
 }
 
 func NewContactRepository(db *gorm.DB) {
@@ -41,8 +41,8 @@ func (repo *repository) delete(contactId int) error{
 	return err
 }
 
-func (repo *repository) update(contactId int, contact models.Contact) error{
-	err := repo.dbClient.Where("id = ?", contactId).Update(&contact).Error
+func (repo *repository) update(contact models.Contact) error{
+	err := repo.dbClient.Where("id = ?", contact.ID).Update(&contact).Error
 	return err
 }
 
@@ -60,6 +60,6 @@ func (repo *repository) Delete(contactId int) error {
 	return repo.delete(contactId)
 }
 
-func (repo *repository) Update(contactId int, contact models.Contact) error {
-	return repo.update(contactId, contact)
+func (repo *repository) Update(contact models.Contact) error {
+	return repo.update(contact)
 }

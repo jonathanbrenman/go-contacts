@@ -6,57 +6,61 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type contactService struct {
+type ContactService struct {
 	Repository repository.ContactRepository
 }
 
-type ContactService interface {
+type ContactServiceInterface interface {
 	GetAll()(contacts []models.Contact, err error)
 	GetContact(contactId int)(contact models.Contact, err error)
 	Add(contact models.Contact) error
 	Delete(contactId int) error
-	Update(contactId int, contact models.Contact) error
+	Update(contact models.Contact) error
 }
 
-func NewContactService(db *gorm.DB) *contactService{
+func NewContactService(db *gorm.DB) *ContactService{
 	repository.NewContactRepository(db)
-	return &contactService{}
+	return &ContactService{}
 }
 
-func (service *contactService) getAll() ([]models.Contact, error){
+func (service *ContactService) getAll() ([]models.Contact, error){
 	return service.Repository.GetAll()
 }
 
-func (service *contactService) getContact(contactId int) (models.Contact, error){
+func (service *ContactService) getContact(contactId int) (models.Contact, error){
 	return service.Repository.GetContact(contactId)
 }
 
-func (service *contactService) add(contact models.Contact) error{
+func (service *ContactService) add(contact models.Contact) error{
 	return service.Repository.Add(contact)
 }
 
-func (service *contactService) delete(contactId int) error{
+func (service *ContactService) delete(contactId int) error{
 	return service.Repository.Delete(contactId)
 }
 
-func (service *contactService) update(contactId int, contact models.Contact) error{
-	return service.Repository.Update(contactId, contact)
+func (service *ContactService) update(contact models.Contact) error{
+	return service.Repository.Update(contact)
 }
 
 // Interface implementation here
 
-func (service *contactService) GetAll() ([]models.Contact, error) {
+func (service *ContactService) GetAll() ([]models.Contact, error) {
 	return service.getAll()
 }
 
-func (service *contactService) GetContact(contactId int) (models.Contact, error) {
+func (service *ContactService) GetContact(contactId int) (models.Contact, error) {
 	return service.getContact(contactId)
 }
 
-func (service *contactService) Delete(contactId int) error {
+func (service *ContactService) Add(contact models.Contact) error {
+	return service.add(contact)
+}
+
+func (service *ContactService) Delete(contactId int) error {
 	return service.delete(contactId)
 }
 
-func (service *contactService) Update(contactId int, contact models.Contact) error {
-	return service.update(contactId, contact)
+func (service *ContactService) Update(contact models.Contact) error {
+	return service.update(contact)
 }
