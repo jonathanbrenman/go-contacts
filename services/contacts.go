@@ -11,11 +11,12 @@ type ContactService struct {
 }
 
 type ContactServiceInterface interface {
-	GetAll()(contacts []models.Contact, err error)
-	GetContact(contactId int)(contact models.Contact, err error)
+	GetAll() (contacts []models.Contact, err error)
+	GetContact(contactId int) (contact models.Contact, err error)
 	Add(contact models.Contact) (err error)
 	Delete(contactId int) (err error)
 	Update(contact models.Contact) (err error)
+	Search(query string) (contacts []models.Contact, err error)
 }
 
 func (service *ContactService) getAll() (contacts []models.Contact, err error) {
@@ -38,6 +39,10 @@ func (service *ContactService) update(contact models.Contact) (err error) {
 	return service.contactRepository.Update(contact)
 }
 
+func (service *ContactService) search(query string) (contacts []models.Contact, err error) {
+	return service.contactRepository.Search(query)
+}
+
 // Interface implementation here
 
 func (service *ContactService) GetAll() (contacts []models.Contact, err error) {
@@ -58,6 +63,10 @@ func (service *ContactService) Delete(contactId int) (err error) {
 
 func (service *ContactService) Update(contact models.Contact) (err error) {
 	return service.update(contact)
+}
+
+func (service *ContactService) Search(query string) (contacts []models.Contact, err error) {
+	return service.search(query)
 }
 
 // Factory Functions

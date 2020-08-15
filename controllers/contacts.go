@@ -21,6 +21,7 @@ type ContactsController interface {
 	Add(c *gin.Context)
 	Delete(c *gin.Context)
 	Update(c *gin.Context)
+	Search(c *gin.Context)
 }
 
 func (ctrl contactsController) getAll(c *gin.Context) {
@@ -120,6 +121,26 @@ func (ctrl contactsController) update(c *gin.Context) {
 	})
 }
 
+func (ctrl contactsController) search(c *gin.Context) {
+	query := c.Query("query")
+	if query == "" {
+		httpError := models.NewHttpError(http.StatusBadRequest,"bad request.")
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+	contacts, err := ctrl.contactService.Search(query)
+	if err != nil {
+		code := 500
+		if err == gorm.ErrRecordNotFound {
+			code = 404
+		}
+		httpError := models.NewHttpError(code, err.Error())
+		models.ReturnHttpError(c, httpError)
+		return
+	}
+	c.JSON(http.StatusOK, contacts)
+}
+
 // Interface implementation here
 
 func (ctrl contactsController) GetAll(c *gin.Context) {
@@ -140,6 +161,10 @@ func (ctrl contactsController) Delete(c *gin.Context) {
 
 func (ctrl contactsController) Update(c *gin.Context) {
 	ctrl.update(c)
+}
+
+func (ctrl contactsController) Search(c *gin.Context) {
+	ctrl.search(c)
 }
 
 // Factory Functions

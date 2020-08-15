@@ -15,6 +15,7 @@ type ContactRepositoryInterface interface {
 	Add(contact models.Contact) (err error)
 	Delete(contactId int) (err error)
 	Update(contact models.Contact) (err error)
+	Search(query string)(contacts []models.Contact, err error)
 }
 
 func (repo *ContactRepository) getAll() (contacts []models.Contact, err error){
@@ -42,6 +43,19 @@ func (repo *ContactRepository) update(contact models.Contact) (err error){
 	return err
 }
 
+func (repo *ContactRepository) search(query string) (contacts []models.Contact, err error){
+	query = "%"+query+"%"
+	err = repo.dbClient.Where(`
+		name like ? or 
+		last_name like ? or
+		company like ? or
+		mail like ? or
+		phone like ? or
+		address like ?
+	`,query,query,query,query,query,query).Find(&contacts).Error
+	return contacts, err
+}
+
 // Interface implementation here
 
 func (repo *ContactRepository) GetAll() (contacts []models.Contact, err error) {
@@ -62,6 +76,10 @@ func (repo *ContactRepository) Delete(contactId int) (err error) {
 
 func (repo *ContactRepository) Update(contact models.Contact) (err error) {
 	return repo.update(contact)
+}
+
+func (repo *ContactRepository) Search(query string) (contacts []models.Contact, err error) {
+	return repo.search(query)
 }
 
 // Factory Functions
