@@ -5,66 +5,68 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type contactRepository struct {
+type ContactRepository struct {
 	dbClient *gorm.DB
 }
 
-type ContactRepository interface {
+type ContactRepositoryInterface interface {
 	GetAll()(contacts []models.Contact, err error)
 	GetContact(contactId int)(contact models.Contact, err error)
-	Add(contact models.Contact) error
-	Delete(contactId int) error
+	Add(contact models.Contact) (err error)
+	Delete(contactId int) (err error)
+	Update(contact models.Contact) (err error)
 }
 
-func NewContactRepository(db *gorm.DB) *contactRepository {
-	return &contactRepository{
-		dbClient: db,
-	}
-}
-
-func (repo *repository) getAll() (contacts []models.Contact, err error){
+func (repo *ContactRepository) getAll() (contacts []models.Contact, err error){
 	err = repo.dbClient.Find(&contacts).Error
 	return contacts, err
 }
 
-func (repo *repository) getContact(contactId int) (contact models.Contact, err error){
+func (repo *ContactRepository) getContact(contactId int) (contact models.Contact, err error){
 	err = repo.dbClient.Where("id = ?", contactId).Find(&contact).Error
 	return contact, err
 }
 
-func (repo *repository) add(contact models.Contact) error{
-	err := repo.dbClient.Save(&contact).Error
+func (repo *ContactRepository) add(contact models.Contact) (err error){
+	err = repo.dbClient.Save(&contact).Error
 	return err
 }
 
-func (repo *repository) delete(contactId int) error{
-	err := repo.dbClient.Where("id = ?", contactId).Delete(models.Contact{}).Error
+func (repo *ContactRepository) delete(contactId int) (err error){
+	err = repo.dbClient.Where("id = ?", contactId).Delete(models.Contact{}).Error
 	return err
 }
 
-func (repo *repository) update(contact models.Contact) error{
-	err := repo.dbClient.Where("id = ?", contact.ID).Update(&contact).Error
+func (repo *ContactRepository) update(contact models.Contact) (err error){
+	err = repo.dbClient.Table("contacts").Where("id = ?", contact.ID).Update(&contact).Error
 	return err
 }
 
 // Interface implementation here
 
-func (repo *repository) GetAll() ([]models.Contact, error) {
+func (repo *ContactRepository) GetAll() (contacts []models.Contact, err error) {
 	return repo.getAll()
 }
 
-func (repo *repository) GetContact(contactId int) (models.Contact, error) {
+func (repo *ContactRepository) GetContact(contactId int) (contact models.Contact, err error) {
 	return repo.getContact(contactId)
 }
 
-func (repo *repository) Add(contact models.Contact) error {
-	return repo.update(contact)
+func (repo *ContactRepository) Add(contact models.Contact) (err error) {
+	return repo.add(contact)
 }
 
-func (repo *repository) Delete(contactId int) error {
+func (repo *ContactRepository) Delete(contactId int) (err error) {
 	return repo.delete(contactId)
 }
 
-func (repo *repository) Update(contact models.Contact) error {
+func (repo *ContactRepository) Update(contact models.Contact) (err error) {
 	return repo.update(contact)
+}
+
+// Factory Functions
+func NewContactRepository(db *gorm.DB) *ContactRepository {
+	return &ContactRepository{
+		dbClient: db,
+	}
 }

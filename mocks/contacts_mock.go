@@ -6,10 +6,6 @@ import (
 )
 
 func LoadMockContacts(db *gorm.DB) {
-	// Initialize table contacts on database
-	db.Debug().LogMode(true)
-	db.AutoMigrate(&models.Contact{})
-
 	// Save contacts to memory database
 	for _, contact := range getContacts() {
 		err := db.Save(&contact).Error
@@ -29,9 +25,8 @@ func getContacts() []models.Contact {
 		Company: "Chebronlet",
 		Phone: "4934-2345",
 		Mail: "homerothomson@simpsons.com",
-		Thumb: models.ContactImage{
-			Thumb: "https://vignette.wikia.nocookie.net/lossimpson/images/b/bd/Homer_Simpson.png/revision/latest?cb=20100522180809&path-prefix=es",
-		},
+		Address: "av siemprevivas",
+		Thumb: "https://vignette.wikia.nocookie.net/lossimpson/images/b/bd/Homer_Simpson.png/revision/latest?cb=20100522180809&path-prefix=es",
 	}
 	contacts = append(contacts, homero)
 
@@ -41,9 +36,8 @@ func getContacts() []models.Contact {
 		Company: "Toyita",
 		Phone: "4934-2346",
 		Mail: "marsh@simpsons.com",
-		Thumb: models.ContactImage{
-			Thumb: "https://vignette.wikia.nocookie.net/lossimpson/images/0/0b/Marge_Simpson.png/revision/latest?cb=20090415001251&path-prefix=es",
-		},
+		Address: "av siemprevivas",
+		Thumb: "https://vignette.wikia.nocookie.net/lossimpson/images/0/0b/Marge_Simpson.png/revision/latest?cb=20090415001251&path-prefix=es",
 	}
 	contacts = append(contacts, marsh)
 
@@ -53,9 +47,8 @@ func getContacts() []models.Contact {
 		Company: "Citroeniete",
 		Phone: "4934-2347",
 		Mail: " bart@simpsons.com",
-		Thumb: models.ContactImage{
-			Thumb: "https://upload.wikimedia.org/wikipedia/en/a/aa/Bart_Simpson_200px.png",
-		},
+		Address: "av siemprevivas",
+		Thumb: "https://upload.wikimedia.org/wikipedia/en/a/aa/Bart_Simpson_200px.png",
 	}
 	contacts = append(contacts,  bart)
 
@@ -65,9 +58,8 @@ func getContacts() []models.Contact {
 		Company: "Volkswagenator",
 		Phone: "4934-2348",
 		Mail: " lisa@simpsons.com",
-		Thumb: models.ContactImage{
-			Thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/e/ec/Lisa_Simpson.png/220px-Lisa_Simpson.png",
-		},
+		Address: "av siemprevivas",
+		Thumb: "https://upload.wikimedia.org/wikipedia/en/thumb/e/ec/Lisa_Simpson.png/220px-Lisa_Simpson.png",
 	}
 	contacts = append(contacts,  lisa)
 
@@ -77,9 +69,8 @@ func getContacts() []models.Contact {
 		Company: "Peugito",
 		Phone: "4934-2348",
 		Mail: " lisa@simpsons.com",
-		Thumb: models.ContactImage{
-			Thumb: "https://upload.wikimedia.org/wikipedia/en/9/9d/Maggie_Simpson.png",
-		},
+		Address: "av siemprevivas",
+		Thumb: "https://upload.wikimedia.org/wikipedia/en/9/9d/Maggie_Simpson.png",
 	}
 	contacts = append(contacts,  magie)
 

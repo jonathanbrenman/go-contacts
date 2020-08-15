@@ -10,9 +10,5 @@ type Contact struct {
 	Phone string `db:"phone" json:"phone"`
 	Mail string `db:"mail" json:"mail"`
 	Address string `db:"address" json:"address"`
-	Thumb ContactImage
-}
-
-type ContactImage struct {
 	Thumb string `db:"thumb" json:"thumb"`
 }
