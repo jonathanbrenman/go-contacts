@@ -1,2 +1,12 @@
-# go-contacts
-Contact book developed with Golang improving S.O.L.I.D
+# go-contact
+
+This is a demo of microservice developed with Gin Gonic using best practice and software design patterns with principle of S.O.L.I.D.
+
+# Starting API
+First of all clone the repository and then run the commands bellow
+```
+    $ cd go-contact
+    $ go run main.go
+```
+ API runs on Port 8080
+
