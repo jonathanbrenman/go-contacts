@@ -7,11 +7,11 @@ This is a demo of microservice developed with Gin Gonic using best practice and 
 * I: (ISP - Interface segregation principle).
 * D: (DIP - Dependency inversion principle).
 
-# Starting API
+# Running with Docker
 First of all clone the repository and then run the commands bellow
 ```
     $ cd go-contact
-    $ go run main.go
+    $ docker-compose up
 ```
  API runs on Port 8080
 

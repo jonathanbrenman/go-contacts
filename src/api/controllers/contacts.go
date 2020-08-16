@@ -24,6 +24,13 @@ type ContactsController interface {
 	Search(c *gin.Context)
 }
 
+// getAll godoc
+// @Summary Get all contacts
+// @Description Get all contacts
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Router /contactss [get]
 func (ctrl contactsController) getAll(c *gin.Context) {
 	contacts, err := ctrl.contactService.GetAll()
 	if err != nil {
@@ -34,6 +41,16 @@ func (ctrl contactsController) getAll(c *gin.Context) {
 	c.JSON(http.StatusOK, contacts)
 }
 
+// getContact godoc
+// @Summary Get contact by id
+// @Description Retrieve a contact using his ID
+// @Accept  json
+// @Produce  json
+// @Param id query string true "contact search by id"
+// @Success 200
+// @Failure 404
+// @Failure 500
+// @Router /contacts/id/:id [get]
 func (ctrl contactsController) getContact(c *gin.Context) {
 	contactIdStr := c.Param("id")
 	if contactIdStr == "" {
@@ -55,6 +72,14 @@ func (ctrl contactsController) getContact(c *gin.Context) {
 	c.JSON(http.StatusOK, contact)
 }
 
+// add godoc
+// @Summary Add new contact
+// @Description Create new contact
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Failure 500
+// @Router /contacts [post]
 func (ctrl contactsController) add(c *gin.Context) {
 	var contact models.Contact
 	c.BindJSON(&contact)
@@ -77,6 +102,16 @@ func (ctrl contactsController) add(c *gin.Context) {
 	})
 }
 
+// delete godoc
+// @Summary Delete contact by id
+// @Description delete a contact using his ID
+// @Accept  json
+// @Produce  json
+// @Param id query string true "contact delete by id"
+// @Success 200
+// @Failure 404
+// @Failure 500
+// @Router /contacts/id/:id [delete]
 func (ctrl contactsController) delete(c *gin.Context) {
 	contactIdStr := c.Param("id")
 	if contactIdStr == "" {
@@ -99,6 +134,15 @@ func (ctrl contactsController) delete(c *gin.Context) {
 	})
 }
 
+// update godoc
+// @Summary Update contact by id
+// @Description update a contact using his ID
+// @Accept  json
+// @Produce  json
+// @Success 200
+// @Failure 404
+// @Failure 500
+// @Router /contacts/id/:id [put]
 func (ctrl contactsController) update(c *gin.Context) {
 	var contact models.Contact
 	c.BindJSON(&contact)
@@ -121,6 +165,16 @@ func (ctrl contactsController) update(c *gin.Context) {
 	})
 }
 
+// search godoc
+// @Summary Search contact by id
+// @Description search a contact using his ID
+// @Accept  json
+// @Produce  json
+// @Param query query string true "contact search by query"
+// @Success 200
+// @Failure 404
+// @Failure 500
+// @Router /contacts/search [get]
 func (ctrl contactsController) search(c *gin.Context) {
 	query := c.Query("query")
 	if query == "" {

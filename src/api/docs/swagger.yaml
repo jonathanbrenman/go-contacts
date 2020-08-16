@@ -1,0 +1,98 @@
+host: localhost:8080
+info:
+  contact:
+    name: Jonathan Brenman
+  description: This is a sample of best practices with golang.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger go-contacts
+  version: "1.0"
+paths:
+  /contacts:
+    post:
+      consumes:
+      - application/json
+      description: Create new contact
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "500": {}
+      summary: Add new contact
+  /contacts/id/:id:
+    delete:
+      consumes:
+      - application/json
+      description: delete a contact using his ID
+      parameters:
+      - description: contact delete by id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "404": {}
+        "500": {}
+      summary: Delete contact by id
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a contact using his ID
+      parameters:
+      - description: contact search by id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "404": {}
+        "500": {}
+      summary: Get contact by id
+    put:
+      consumes:
+      - application/json
+      description: update a contact using his ID
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "404": {}
+        "500": {}
+      summary: Update contact by id
+  /contacts/search:
+    get:
+      consumes:
+      - application/json
+      description: search a contact using his ID
+      parameters:
+      - description: contact search by query
+        in: query
+        name: query
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "404": {}
+        "500": {}
+      summary: Search contact by id
+  /contactss:
+    get:
+      consumes:
+      - application/json
+      description: Get all contacts
+      produces:
+      - application/json
+      responses:
+        "200": {}
+      summary: Get all contacts
+swagger: "2.0"

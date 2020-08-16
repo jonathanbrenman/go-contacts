@@ -1,6 +1,11 @@
 package router
 
-import "Agenda/controllers"
+import (
+	"Agenda/controllers"
+	"github.com/swaggo/gin-swagger" // gin-swagger middleware
+	"github.com/swaggo/files" // swagger embed files
+	_ "Agenda/docs"
+)
 
 func (r routerCtx) routes() {
 	// Define Controllers
@@ -15,4 +20,5 @@ func (r routerCtx) routes() {
 	r.router.POST("/contacts/update", contactController.Update)
 	r.router.POST("/contacts", contactController.Add)
 	r.router.DELETE("/contacts/id/:id", contactController.Delete)
+	r.router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }
