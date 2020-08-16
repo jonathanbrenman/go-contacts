@@ -13,10 +13,10 @@ func TestInitDatabase(t *testing.T) {
 	assert.Equal(nil, err)
 }
 
-func TestNewRepositoryDBFail(t *testing.T) {
+func TestInitDatabaseFail(t *testing.T) {
 	err := InitDatabase("sqlite3", "./")
 	assert := assert.New(t)
-	assert.NotEqual(errors.New("[Error] Connection to database sqlite3 has failed"), err)
+	assert.Equal(errors.New("[Error] Connection to database sqlite3 has failed"), err)
 }
 
 func TestGetDbConn(t *testing.T) {

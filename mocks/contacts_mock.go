@@ -5,14 +5,16 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func LoadMockContacts(db *gorm.DB) {
+func LoadMockContacts(db *gorm.DB) []models.Contact {
 	// Save contacts to memory database
-	for _, contact := range getContacts() {
+	contacts := getContacts()
+	for _, contact := range contacts {
 		err := db.Save(&contact).Error
 		if err != nil {
 			panic(err)
 		}
 	}
+	return contacts
 }
 
 func getContacts() []models.Contact {
