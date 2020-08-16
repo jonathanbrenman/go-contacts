@@ -1,0 +1,141 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample of best practices with golang.",
+        "title": "Swagger go-contacts",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "Jonathan Brenman"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {
+        "/contacts": {
+            "post": {
+                "description": "Create new contact",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Add new contact",
+                "responses": {
+                    "200": {},
+                    "500": {}
+                }
+            }
+        },
+        "/contacts/id/:id": {
+            "get": {
+                "description": "Retrieve a contact using his ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get contact by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "contact search by id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {},
+                    "404": {},
+                    "500": {}
+                }
+            },
+            "put": {
+                "description": "update a contact using his ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update contact by id",
+                "responses": {
+                    "200": {},
+                    "404": {},
+                    "500": {}
+                }
+            },
+            "delete": {
+                "description": "delete a contact using his ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete contact by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "contact delete by id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {},
+                    "404": {},
+                    "500": {}
+                }
+            }
+        },
+        "/contacts/search": {
+            "get": {
+                "description": "search a contact using his ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Search contact by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "contact search by query",
+                        "name": "query",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {},
+                    "404": {},
+                    "500": {}
+                }
+            }
+        },
+        "/contactss": {
+            "get": {
+                "description": "Get all contacts",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all contacts",
+                "responses": {
+                    "200": {}
+                }
+            }
+        }
+    }
+}
