@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  mantra_api:
+  go_contacts_api:
     build:
       context: .
       dockerfile: Dockerfile
